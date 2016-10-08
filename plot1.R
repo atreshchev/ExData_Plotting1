@@ -14,12 +14,14 @@ stopdate <- dmy_hm("02/02/2007 23:59")
 startrow <- as.numeric(difftime(startdate, initdate, units = "mins")) # get searched row difference as time difference
 stoprow <- as.numeric(difftime(stopdate, initdate, units = "mins"))
 
+initial <- read.table(data_path, nrows = 6, sep = ";", header = TRUE) # read for colnames & dataclass
 data <- read.table(data_path, skip = (startrow + 1), nrows = (stoprow + 1 - startrow),
-                   sep = ";", na = "?", header = FALSE, col.names = colnames(initial),
-                   colClasses = dataclasses) # read desired rows only
+                   sep = ";", na = "?", header = FALSE, 
+                   col.names = (colnames(initial)),
+                   colClasses = sapply(initial, class)) # read desired rows only
 
 # 2. Drawing & writing Plot1 - Hist (GAP)
-png(filename = "plot1.png", height = 600, width = 750)
+png(filename = "plot1.png", height = 480, width = 600)
 hist(data$Global_active_power, col = "red", main = "Global Active Power",
      xlab = "Global Active Power (kilowatts)")
 dev.off()
